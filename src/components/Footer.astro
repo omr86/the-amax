@@ -3,31 +3,51 @@ const today = new Date();
 ---
 
 <footer>
-	<p>&copy; {new Date().getFullYear()} The aMax. Alle Rechte vorbehalten.</p>
-	<div class="legal-links">
-		<a href="/impressum">Impressum</a>
-		&bull;
-		<a href="/datenschutz">Datenschutz</a>
+	<div class="footer-content">
+		<p class="copyright">
+			&copy; {today.getFullYear()} The aMax. Alle Rechte vorbehalten.
+		</p>
+		<nav class="legal-links" aria-label="Rechtliche Hinweise">
+			<a href="/impressum">Impressum</a>
+			<span class="separator">&bull;</span>
+			<a href="/datenschutz">Datenschutz</a>
+		</nav>
 	</div>
 </footer>
+
 <style>
 	footer {
-		padding: 2em 1em 6em 1em;
+		padding: 2.5em 1em 3em 1em;
 		background: linear-gradient(var(--gray-gradient)) no-repeat;
 		color: rgb(var(--gray));
 		text-align: center;
+		font-size: 0.9rem;
 	}
-	.social-links {
+	.footer-content {
 		display: flex;
-		justify-content: center;
-		gap: 1em;
-		margin-top: 1em;
+		flex-direction: column;
+		align-items: center;
+		gap: 0.5em;
 	}
-	.social-links a {
-		text-decoration: none;
+	.copyright {
+		margin: 0;
+	}
+	.legal-links {
+		display: flex;
+		align-items: center;
+		gap: 0.75em;
+	}
+	.legal-links a {
 		color: rgb(var(--gray));
+		text-decoration: none;
+		transition: color 0.2s ease;
 	}
-	.social-links a:hover {
+	.legal-links a:hover {
 		color: rgb(var(--gray-dark));
+		text-decoration: underline;
+	}
+	.separator {
+		opacity: 0.5;
+		user-select: none;
 	}
 </style>
