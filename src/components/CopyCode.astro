@@ -1,0 +1,101 @@
+---
+// src/components/CopyCode.astro
+---
+
+<script>
+    function setupCopyButtons() {
+        const preBlocks = document.querySelectorAll("pre");
+
+        preBlocks.forEach((pre) => {
+            // Verhindert mehrfaches Anhängen bei Seitenwechseln
+            if (pre.querySelector(".copy-code-btn")) return;
+
+            // Wrapper für relative Positionierung
+            pre.style.position = "relative";
+
+            const button = document.createElement("button");
+            button.className = "copy-code-btn";
+            button.type = "button";
+            button.setAttribute("aria-label", "Code kopieren");
+            button.innerText = "Kopieren";
+
+            button.addEventListener("click", async () => {
+                const code = pre.querySelector("code");
+                const text = code ? code.innerText : pre.innerText;
+
+                try {
+                    await navigator.clipboard.writeText(text.trim());
+                    button.innerText = "Kopiert!";
+                    button.classList.add("copied");
+
+                    setTimeout(() => {
+                        button.innerText = "Kopieren";
+                        button.classList.remove("copied");
+                    }, 2000);
+                } catch (err) {
+                    console.error("Fehler beim Kopieren:", err);
+                    button.innerText = "Fehler";
+                }
+            });
+
+            pre.appendChild(button);
+        });
+    }
+
+    // Initial ausführen
+    setupCopyButtons();
+
+    // Unterstützt auch Astro-View-Transitions (falls später aktiviert)
+    document.addEventListener("astro:page-load", setupCopyButtons);
+</script>
+
+<style is:global>
+    pre {
+        position: relative;
+    }
+
+    .copy-code-btn {
+        position: absolute;
+        top: 0.6rem;
+        right: 0.6rem;
+        padding: 0.25rem 0.55rem;
+        font-size: 0.75rem;
+        font-family: inherit;
+        color: rgba(255, 255, 255, 0.7);
+        background-color: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 0.35rem;
+        cursor: pointer;
+        opacity: 0;
+        transition:
+            opacity 0.15s ease,
+            background-color 0.15s ease,
+            color 0.15s ease;
+        z-index: 10;
+        user-select: none;
+    }
+
+    /* Button dezent einblenden, sobald man über den Codeblock hovert */
+    pre:hover .copy-code-btn {
+        opacity: 1;
+    }
+
+    .copy-code-btn:hover {
+        background-color: rgba(255, 255, 255, 0.2);
+        color: #ffffff;
+    }
+
+    .copy-code-btn.copied {
+        background-color: #10b981;
+        border-color: #059669;
+        color: #ffffff;
+        opacity: 1;
+    }
+
+    /* Auf Touchscreens immer leicht sichtbar halten */
+    @media (hover: none) {
+        .copy-code-btn {
+            opacity: 0.75;
+        }
+    }
+</style>
